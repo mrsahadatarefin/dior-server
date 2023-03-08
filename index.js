@@ -51,6 +51,16 @@ try{
 
 
     // })
+
+
+    app.get('/users',async(req,res)=>{
+        const query ={}
+        
+         const allUser = await usersCollection.find(query).toArray();
+         res.send(allUser)
+        
+            })
+
     app.post('/users',async(req,res)=>{
 
         const user = req.body;
@@ -58,6 +68,7 @@ try{
         const result = await usersCollection.insertOne(user);
         res.send(result) 
     })
+
 
     app.get('/orders',async (req,res)=>{
    
