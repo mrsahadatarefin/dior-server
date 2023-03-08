@@ -42,6 +42,19 @@ try{
 
 
     })
+    app.put('/users/admin/:id',async (req,res)=>{
+
+        const id = req.params.id;
+        const filter = {_id:new ObjectId(id)}
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+              role:'admin'
+            },
+          };
+          const result = await usersCollection.updateOne(filter,updateDoc,options)
+          res.send(result)
+    })
 
     // app.post('/category',async (req,res)=>{
 
@@ -54,7 +67,7 @@ try{
 
 
     app.get('/users',async(req,res)=>{
-        const query ={}
+        const query = {};
         
          const allUser = await usersCollection.find(query).toArray();
          res.send(allUser)
