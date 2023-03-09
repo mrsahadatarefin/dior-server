@@ -35,12 +35,20 @@ try{
     const categoryCollection = client.db('diorClub').collection('category')
     const ordersCollection = client.db('diorClub').collection('orders')
     const usersCollection = client.db('diorClub').collection('users')
+    const paymentCollection = client.db('diorClub').collection('paymentUser')
 
     app.get('/categoryName', async (req,res) =>{
         const query ={};
         const result = await singleCategoryCollection.find(query).toArray();
       res.send(result);
 
+
+    })
+
+    app.post('/payment', async(req,res)=>{
+        const payment = req.body;
+        const result =  await paymentCollection.insertOne(payment)
+        res.send(result)
 
     })
 
