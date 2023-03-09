@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require ('cors')
 const app = express()
 require('dotenv').config()
+const stripe = require("stripe")('sk_test_51MjewJLDPp6NgYfu9qsvWthDs8zy2asC6o5ZvrThntNlx3qG55BcSHIOxG6MaRGEXlWg0jprS0OtnBoy4JMdrjXK00WRtqiiOJ');
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
@@ -43,6 +44,29 @@ try{
 
     })
 
+    app.post('/create-payment-intent',async (req,res)=>{
+    
+        const allSum = req.body;
+        const price = allSum.allSum;
+        const amount = price*100;
+        const paymentIntent = await stripe.paymentIntents.create({
+            currency:'usd',
+            amount:amount,
+
+            "payment_method_types": [
+                "card"
+              ],
+              
+
+        })
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+          });
+
+
+
+    })
+
 app.get('/users/admin/:email',async (req,res)=>{
     const email = req.params.email
 
@@ -67,14 +91,14 @@ app.get('/users/admin/:email',async (req,res)=>{
           res.send(result)
     })
 
-    // app.post('/category',async (req,res)=>{
+    app.post('/category',async (req,res)=>{
 
-    //     const category = req.body;
-    //     const result = await categoryCollection.insertOne(category);
-    //     res.send(result)
+        const category = req.body;
+        const result = await categoryCollection.insertOne(category);
+        res.send(result)
 
 
-    // })
+    })
 
 
     app.get('/users',async(req,res)=>{
